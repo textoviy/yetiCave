@@ -1,7 +1,3 @@
-/**
- * Date: 19.06.2018
- * Time: 13:05
- */
 <section class="promo">
     <h2 class="promo__title">Нужен стафф для катки?</h2>
     <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
@@ -42,14 +38,14 @@
                 </div>
                 <div class="lot__info">
                     <span class="lot__category"><?=$lots_list[$key]['category_name']; ?></span>
-                    <h3 class="lot__title"><a class="text-link" href="lot.html"><?=$lots_list[$key]['title']; ?></a></h3>
+                    <h3 class="lot__title"><a class="text-link" href="lot.html"><?=htmlspecialchars(($lots_list[$key]['title'])) ?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?=format_text($lots_list[$key]['price']); ?></span>
                         </div>
                         <div class="lot__timer timer">
-
+                            <?= $timer;?>
                         </div>
                     </div>
                 </div>

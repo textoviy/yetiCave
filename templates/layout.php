@@ -1,75 +1,3 @@
-/**
- * Date: 19.06.2018
- * Time: 13:05
- */
-<?php
-$is_auth = (bool) rand(0, 1);
-
-$user_name = 'Константин';
-$user_avatar = 'img/user.jpg';
-
-$categories = [
-    "Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"
-];
-
-function format_text($number) {
-    if ($number > 1000) $number = ceil($number);
-
-    $min_length_string = 3;
-    $num = mb_strlen($number);
-
-    if ($num > $min_length_string) {
-        $firstText = mb_substr($number, $num - 3, $min_length_string);
-        $secondText = mb_substr($number, 0, $num - $min_length_string);
-        $number = $secondText . " " .  $firstText . " ₽";
-
-
-
-    };
-
-    return $number;
-}
-
-
-$lots_list = [
-    [
-        'title' => '2014 Rossignol District Snowboard',
-        'category_name' => 'Доски и лыжи',
-        'price' => '10999',
-        'url' => 'img/lot-1.jpg'
-    ],
-    [
-        'title' => 'DC Ply Mens 2016/2017 Snowboard',
-        'category_name' => 'Доски и лыжи',
-        'price' => '159999',
-        'url' => 'img/lot-2.jpg'
-    ],
-    [
-        'title' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'category_name' => 'Крепления',
-        'price' => '8000',
-        'url' => 'img/lot-3.jpg'
-    ],
-    [
-        'title' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'category_name' => 'Ботинки',
-        'price' => '10999',
-        'url' => 'img/lot-4.jpg'
-    ],
-    [
-        'title' => 'Куртка для сноуборда DC Mutiny Charocal',
-        'category_name' => 'Одежда',
-        'price' => '7500',
-        'url' => 'img/lot-5.jpg'
-    ],
-    [
-        'title' => 'Маска Oakley Canopy',
-        'category_name' => 'Разное',
-        'price' => '5400',
-        'url' => 'img/lot-6.jpg'
-    ],
-];
-?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -93,9 +21,23 @@ $lots_list = [
         <a class="main-header__add-lot button" href="add-lot.html">Добавить лот</a>
 
         <nav class="user-menu">
-
-
-
+            <?php if ($is_auth): ?>
+                <div class="user-menu__image">
+                    <img src="<?= $user_avatar; ?>" width="40" height="40" alt="Пользователь">
+                </div>
+                <div class="user-menu__logged">
+                    <p><a href="my-lots.php"><?= htmlspecialchars($user_name); ?></a></p>
+                </div>
+            <?php else: ?>
+                <ul class="user-menu__list">
+                    <li class="user-menu__item">
+                        <a href="sign-up.php">Регистрация</a>
+                    </li>
+                    <li class="user-menu__item">
+                        <a href="login.php">Вход</a>
+                    </li>
+                </ul>
+            <?php endif; ?>
         </nav>
     </div>
 </header>

@@ -1,11 +1,6 @@
-/**
- * Date: 19.06.2018
- * Time: 13:15
-
-
 <?php
 
-//Создаем функцию-шаблонизатор
+//Функцию-шаблонизатор
 
 function renderTemplate($templatePath, $templateData = []) {
     $content = '';

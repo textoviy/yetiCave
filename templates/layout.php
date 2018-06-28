@@ -50,22 +50,7 @@
 
 
 <footer class="main-footer">
-    <nav class="nav">
-        <ul class="nav__list container">
-            <li class="nav__item">
-                <a href="all-lots.html">Разное</a>
-            </li>
-            <?php
-            $num = count($categories);
-            for($i = 0; $i < $num; $i++) {
-                $cat = $categories[$i];
-                echo('<li class="nav__item">');
-                echo('<a href="all-lots.html">' . $cat . '</a>');
-                echo('</li>');
 
-            }; ?>
-        </ul>
-    </nav>
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">
             <p>© 2018, YetiCave</p>

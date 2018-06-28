@@ -42,34 +42,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = [];
     foreach ($required as $key) {
-
-        if (empty($_POST[$key])) {
-            $errors[$key] = 'Заполните это поле:';
+        if ($_POST['category'] == 'standard_category') {
+            $errors['category'] = 'Заполните это поле:';
         }
+        if (empty($_POST[$key])) {
+
+            $errors[$key] = 'Заполните это поле:';
+
+        }
+
+
     }
 
-    if (isset($_FILES['lot_img']['lot_name'])) {
-        $tmp_name = $_FILES['lot_img']['tmp_name'];
-        $path = $_FILES['lot_img']['lot_name'];
+    if (isset($_FILES['lot_file'])) {
+        $tmp_name = $_FILES['lot_file']['tmp_name'];
+        $file_path = __DIR__ . '\uploads\\';
+        $file_name = $_FILES['lot_file']['name'];
+        $file_url = $file_path . $file_name;
 
         $file_info = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($file_info, $tmp_name);
-        if ($file_type !== 'image/gif' || $file_type !== 'image/png' || $file_type !== 'image/jpeg') {
-            $errors['file'] = 'Загрузитке картинку в формате на выбор: 	png, jpg, gif';
-        } else {
-            move_uploaded_file($tmp_name, 'uploads/' . $path);
-        }
 
-    } else {
-        $errors['file'] = "Вы не загрузили файл";
+        if (!($file_type === "image/gif" || $file_type === "image/png" || $file_type === "image/jpeg" || $file_type === "image/jpg")) {
+            $errors['lot_file'] = 'Загрузите картинку в формате на выбор: 	png, jpg, gif';
+
+        } else {
+            unset($_POST['lot_file']);
+
+            move_uploaded_file($tmp_name, $file_url);
+            $lot['path'] = $file_name;
+
+        }
+    }
+    else {
+        $errors['lot_file'] = "Вы не загрузили файл";
+
     }
 
+
+    var_dump(count($errors));
+    var_dump($errors);
     if (count($errors)) {
         $content = renderTemplate('templates/add-index.php', [
             'errors' => $errors,
             'dict' => $dict
         ]);
-    } else {
+    }
+    else {
         $content = renderTemplate('templates/layout.php', [
 
 
@@ -77,8 +96,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 
-} else {
-    $content = renderTemplate('templates/add-index.php', []);
+}
+else {
+    $content = renderTemplate('templates/add-index.php', [
+        'dict' => $dict
+    ]);
 }
 
 $layout = renderTemplate('templates/layout.php', [

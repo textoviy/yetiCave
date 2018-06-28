@@ -1,5 +1,6 @@
-<?php var_dump($errors) ?>
-<form class="form form--add-lot container <?= count($errors) ?  " form--invalid" : ""; ?>" action="add.php" method="POST"> <!-- form--invalid -->
+<?php var_dump($errors)."<br>" ?>
+<?php var_dump($_FILES['lot_file']) ?>
+<form class="form form--add-lot container <?= count($errors) ?  " form--invalid" : ""; ?>" action="add.php" method="POST" enctype="multipart/form-data"> <!-- form--invalid -->
         <h2>Добавление лота</h2>
         <div class="form__container-two">
             <div class="form__item <?=isset($errors['lot_name']) ? 'form__item--invalid' : '';?>"> <!-- form__item--invalid -->
@@ -10,13 +11,13 @@
             <div class="form__item <?=isset($errors['category']) ? 'form__item--invalid' : '';?>">
                 <label for="category">Категория</label>
                 <select id="category" name="category">
-                    <option>Выберите категорию</option>
-                    <option>Доски и лыжи</option>
-                    <option>Крепления</option>
-                    <option>Ботинки</option>
-                    <option>Одежда</option>
-                    <option>Инструменты</option>
-                    <option>Разное</option>
+                    <option value="standard_category">Выберите категорию</option>
+                    <option value="boards_skis">Доски и лыжи</option>
+                    <option value="mountings">Крепления</option>
+                    <option value="boots">Ботинки</option>
+                    <option value="clothes">Одежда</option>
+                    <option value="instruments">Инструменты</option>
+                    <option value="other">Разное</option>
                 </select>
                 <span class="form__error"><?=$errors['category'];?></span>
             </div>
@@ -26,7 +27,7 @@
             <textarea id="message" name="message" placeholder="Напишите описание лота" ></textarea>
             <span class="form__error"><?=$errors['message'];?></span>
         </div>
-        <div class="form__item form__item--file"> <!-- form__item--uploaded -->
+        <div class="form__item form__item--file <?=isset($errors['lot_file']) ? 'form__item--invalid' : '';?>"> <!-- form__item--uploaded -->
             <label>Изображение</label>
             <div class="preview">
                 <button class="preview__remove" type="button">x</button>
@@ -35,11 +36,12 @@
                 </div>
             </div>
             <div class="form__input-file">
-                <input class="visually-hidden" name="lot_file" type="file" id="lot-img" value="">
+                <input class="visually-hidden" name="lot_file" type="file" id="lot_img" value="">
                 <label for="lot_img">
-                    <span>+ Добавить</span>
+                    <span class="">+ Добавить</span>
                 </label>
             </div>
+            <span class="form__error"><?=isset($errors['lot_file']) ? $errors['lot_file'] : '';?></span>
         </div>
         <div class="form__container-three">
             <div class="form__item form__item--small <?=isset($errors['lot_rate']) ? 'form__item--invalid' : '';?>">

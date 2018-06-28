@@ -14,8 +14,18 @@ $secsToMidnight = $tsMidnight - $ts;
 
 $hours = floor($secsToMidnight / 3600);
 $minutes = floor(($secsToMidnight % 3600) / 60);
+
+
+
 $timer = $hours . " : " . $minutes;
 
+if ($minutes < 10) {
+    $minutes = 0 . $minutes ;
+};
+
+if ($hours < 10) {
+    $hours = 0 . $hours ;
+};
 
 
 $is_auth = (bool) rand(0, 1);

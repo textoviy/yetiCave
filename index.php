@@ -47,7 +47,9 @@ $content = renderTemplate('templates/index.php', [
 
 ]);
 
+
 $layout_content = renderTemplate('templates/layout.php', [
+    'nav' => $nav,
     'main_title' => 'yetiCave - аукцион',
     'categories' => $categories,
     'content' => $content,
@@ -55,8 +57,6 @@ $layout_content = renderTemplate('templates/layout.php', [
     'user_name' => $user_name,
     'user_avatar' => $user_avatar,
 ]);
-
-
 
 print($layout_content);
 

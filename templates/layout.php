@@ -42,7 +42,7 @@
     </div>
 </header>
 
-
+<?=$nav; ?>
 <main class="container">
     <?=$content; ?>
 </main>
@@ -50,7 +50,7 @@
 
 
 <footer class="main-footer">
-
+    <?=$nav; ?>
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">
             <p>© 2018, YetiCave</p>

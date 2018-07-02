@@ -109,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     else {
         $content = renderTemplate('templates/lot_index.php', [
+            'is_auth' => $is_auth,
             'lot' => $lot,
             'categories' => $categories,
             'title' => $lot['lot_name'],

@@ -19,7 +19,6 @@
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
         <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
-
         <nav class="user-menu">
             <?php if ($is_auth): ?>
                 <div class="user-menu__image">
@@ -27,7 +26,11 @@
                 </div>
                 <div class="user-menu__logged">
                     <p><a href="my-lots.php"><?= htmlspecialchars($user_name); ?></a></p>
+                    <p><a href="logout.php">Выход</a></p>
                 </div>
+
+
+
             <?php else: ?>
                 <ul class="user-menu__list">
                     <li class="user-menu__item">

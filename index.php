@@ -1,10 +1,14 @@
 <?php
-
-
-
 require 'templates/functions.php';
 require 'templates/lots_list.php';
 
+session_start();
+
+if (isset($_SESSION['user'])) {
+    $is_auth = true;
+    $user_name = $_SESSION['user']['name'];
+    $user_avatar = $_SESSION['user']['avatar'] ? 'img/uploads/users/' . $_SESSION['user']['avatar']: 'img/user.jpg';
+}
 
 date_default_timezone_set("Europe/Moscow");
 $ts = time();
@@ -14,7 +18,6 @@ $secsToMidnight = $tsMidnight - $ts;
 
 $hours = floor($secsToMidnight / 3600);
 $minutes = floor(($secsToMidnight % 3600) / 60);
-
 
 
 $timer = $hours . " : " . $minutes;
@@ -28,15 +31,12 @@ if ($hours < 10) {
 };
 
 
-$is_auth = (bool) rand(0, 1);
-
 $user_name = 'Константин';
 $user_avatar = 'img/user.jpg';
 
 $categories = [
     "Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"
 ];
-
 
 
 $content = renderTemplate('templates/index.php', [
@@ -54,7 +54,7 @@ $layout_content = renderTemplate('templates/layout.php', [
     'categories' => $categories,
     'content' => $content,
     'is_auth' => $is_auth,
-    'user_name' => $user_name,
+    'user_name' => $_SESSION['user']['name'],
     'user_avatar' => $user_avatar,
 ]);
 

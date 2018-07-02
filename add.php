@@ -2,11 +2,30 @@
 require_once 'templates/functions.php';
 require 'templates/lots_list.php';
 
-
+session_start();
 
 //$categories = [
 //    "Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"
 //];
+
+if (isset($_SESSION['user'])) {
+    $is_auth = true;
+    $user_name = $_SESSION['user']['name'];
+    $user_avatar = $_SESSION['user']['avatar'] ? 'img/uploads/users/' . $_SESSION['user']['avatar']: 'img/user.jpg';
+} else {
+    http_response_code(403);
+
+    $page_content = renderTemplate('templates/add_403.php', []);
+
+    $layout_content = renderTemplate('templates/layout.php', [
+        'main_title' => $page_title,
+        'categories' => $categories,
+        'content' => $page_content
+    ]);
+
+    print($layout_content);
+    exit(0);
+}
 
 $categories = [
     'boards_skis' => 'Доски и лыжи',
@@ -110,7 +129,10 @@ else {
 $layout = renderTemplate('templates/layout.php', [
     'content' => $content,
     'categories' => $categories,
-    'main_title' => 'yetiCave - добавить новый лот'
+    'main_title' => 'yetiCave - добавить новый лот',
+    'is_auth' => $is_auth,
+    'user_name' => $_SESSION['user']['name'],
+    'user_avatar' => $user_avatar,
 ]);
 
 

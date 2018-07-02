@@ -4,6 +4,7 @@ require 'templates/lots_list.php';
 require 'templates/categories.php';
 require 'userdata.php';
 
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
@@ -30,7 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!count($errors) && $user) {
         if (password_verify($form['password'], $user['password'])) {
+
             $_SESSION['user'] = $user;
+
         } else {
             $errors['password'] = 'Неверный пароль';
         }
@@ -57,12 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         ]);
     } else {
-
-        session_start();
         header('Location: /index.php');
         exit();
     }
-} 
+}
+
+print($layout_content);
 
 $categories = [
     "Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"

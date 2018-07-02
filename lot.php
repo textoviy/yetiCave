@@ -2,6 +2,14 @@
 require 'templates/functions.php';
 require 'templates/lots_list.php';
 
+session_start();
+
+if (isset($_SESSION['user'])) {
+    $is_auth = true;
+    $user_name = $_SESSION['user']['name'];
+    $user_avatar = $_SESSION['user']['avatar'] ? 'img/uploads/users/' . $_SESSION['user']['avatar']: 'img/user.jpg';
+}
+
 
 if ($_GET['lot_id'] > count($lots_list)) {
     http_response_code(404);
@@ -64,6 +72,7 @@ setcookie('viewed_lots', $encoded_data, time() + 100500, '/');
 
 $content = renderTemplate('templates/lot_index.php', [
     'lot' => $lot,
+    'is_auth' => $is_auth,
     'title' => $lot['title'],
     'category_name' => $lot['category_name'],
     'price' => $lot['price'],
@@ -71,9 +80,12 @@ $content = renderTemplate('templates/lot_index.php', [
 ]);
 
 $layout_content = renderTemplate('templates/layout.php', [
+    'is_auth' => $is_auth,
     'main_title' => $lot['title'],
     'category_name' => $lot['category_name'],
     'content' => $content,
+    'user_name' => $_SESSION['user']['name'],
+    'user_avatar' => $user_avatar,
     'categories' => $categories
 ]);
 

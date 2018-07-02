@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'lot' => $lot,
             'categories' => $categories,
             'title' => $lot['lot_name'],
-            'category_name' =>$categories[$lot['category_name']] ,
+            'category_name' => $categories[$lot['category_name']] ,
             'price' => $lot['lot_rate'],
             'lot_description' => $lot['message'],
             'url' => '\uploads\\img\\' . $file_name

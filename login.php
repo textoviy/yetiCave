@@ -31,9 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!count($errors) && $user) {
         if (password_verify($form['password'], $user['password'])) {
-
             $_SESSION['user'] = $user;
-
         } else {
             $errors['password'] = 'Неверный пароль';
         }

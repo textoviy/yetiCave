@@ -1,4 +1,5 @@
 <?php
+
 $categories = [
     'boards_skis' => 'Доски и лыжи',
     'mountings' => 'Крепления',
@@ -7,4 +8,5 @@ $categories = [
     'instruments' => 'Инструменты',
     'other' => 'Разное'
 ];
+
 ?>

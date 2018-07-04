@@ -1,0 +1,63 @@
+SELECT DISTINCT lots.lot_name, lot_start_price, lot_picture, MAX(IF(bid_amount IS NULL, lot_start_price, bid_amount)) AS lot_price,
+  COUNT(bid_lot) AS bids_number, categories.category_name AS category_name, lot_creation_date
+FROM lots
+LEFT JOIN bids ON lots.lot_id = bids.bid_lot
+INNER JOIN categories ON lots.lot_category = categories.category_id
+WHERE CURRENT_TIMESTAMP() < lot_end_date
+GROUP BY lots.lot_name, lot_start_price, lot_picture, lot_creation_date, lot_category
+ORDER BY lot_creation_date DESC;
+
+http://websketches.ru/blog/sql20min
+
+
+-- верная eblya
+
+SELECT lot_name, lot_start_price, lot_picture,
+  COUNT(bid_lot) AS bids_number, category_name, lot_creation_date
+FROM lots
+  LEFT JOIN bids ON lots.lot_id = bids.bid_lot
+  INNER JOIN categories ON lots.lot_category = categories.category_id
+WHERE lot_creation_date < lot_end_date
+GROUP BY lots.lot_name, lot_start_price, lot_picture, lot_creation_date, lot_category
+ORDER BY lot_creation_date DESC;
+
+
+
+SELECT lots.id, lots.name, lots.description, lots.picture, lots.creation_date, lots.end_date, lots.start_price, lots.bet_step, lots.author, lots.winner, categories.name AS category_name
+FROM lots
+INNER JOIN categories ON lots.category = categories.id
+WHERE lots.id = 1;
+
+UPDATE lots
+SET lots.name = 'Новое название лота'
+WHERE lots.id = 1;
+
+SELECT bids.date, bids.amount, bids.user
+FROM bids
+WHERE bids.lot = 3
+ORDER BY bids.date DESC
+LIMIT 10;
+
+
+-- отсеяные eblyi
+
+
+SELECT lot_id, lot_name, lot_description,
+ lot_picture, lot_creation_date,
+  lot_end_date, lot_start_price,
+  lot_bet_step, lot_author,
+   lot_winner, category_name
+FROM lots
+INNER JOIN categories ON lots.lot_category = categories.category_id
+WHERE lot_id = 1;
+
+UPDATE lots
+SET lot_name = 'Новое название лота'
+WHERE lot_id = 1;
+
+SELECT bid_date, bid_amount, bid_user
+FROM bids
+WHERE bid_lot = 3
+ORDER BY bid_date DESC
+LIMIT 10;
+

@@ -2,12 +2,13 @@
 require 'templates/functions.php';
 require 'templates/lots_list.php';
 require 'templates/categories.php';
-require 'userdata.php';
+require 'config/db.php';
 
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
+
 
     $required = [
         'email',
@@ -29,15 +30,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $user = searchUserByEmail($_POST['email'], $users);
 
+
     if (!count($errors) && $user) {
-        if (password_verify($form['password'], $user['password'])) {
+
+        if ($form['password'] == $user['user_password']) {
             $_SESSION['user'] = $user;
         } else {
             $errors['password'] = 'Неверный пароль';
         }
     } else {
 
-        if ($_POST['email'] == $user['email'] && !empty($_POST['email'])) {
+        if ($_POST['email'] == $user['user_email'] && !empty($_POST['email'])) {
             unset($errors['email']);
         } else {
             $errors['email'] = empty($_POST['email']) ? 'Вам стоит ввести e-mail' : 'Такой пользователь не найден';

@@ -6,7 +6,7 @@ session_start();
 
 if (isset($_SESSION['user'])) {
     $is_auth = true;
-    $user_name = $_SESSION['user']['name'];
+    $user_name = $_SESSION['user']['user_name'];
     $user_avatar = $_SESSION['user']['avatar'] ? 'img/uploads/users/' . $_SESSION['user']['avatar']: 'img/user.jpg';
 } else {
     http_response_code(403);

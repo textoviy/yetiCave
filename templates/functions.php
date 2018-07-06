@@ -1,5 +1,7 @@
 <?php
 
+require 'config/db.php';
+
 //Функцию-шаблонизатор
 
 function renderTemplate($templatePath, $templateData = []) {
@@ -35,15 +37,23 @@ function format_text($number) {
 
 
 function searchUserByEmail($postEmail, $users) {
+    require 'config/db.php';
+    $db = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+    $sql = "SELECT * FROM users";
+    $result = mysqli_query($db, $sql);
+    $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    foreach ($users as $user) {
-        if ($user['email'] == $postEmail) {
+
+
+    foreach ($rows as $user) {
+        if ($user['user_email'] == $postEmail) {
             return $user;
         }
     }
     if (empty($user)) {
         return false;
     }
+
 
 }
 

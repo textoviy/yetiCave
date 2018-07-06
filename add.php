@@ -10,7 +10,7 @@ session_start();
 
 if (isset($_SESSION['user'])) {
     $is_auth = true;
-    $user_name = $_SESSION['user']['name'];
+    $user_name = $_SESSION['user']['user_name'];
     $user_avatar = $_SESSION['user']['avatar'] ? 'img/uploads/users/' . $_SESSION['user']['avatar']: 'img/user.jpg';
 } else {
     http_response_code(403);
@@ -67,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
     }
-
     if (isset($_FILES['lot_file'])) {
         $tmp_name = $_FILES['lot_file']['tmp_name'];
         $file_path = __DIR__ . '\uploads\\img\\';
@@ -132,7 +131,7 @@ $layout = renderTemplate('templates/layout.php', [
     'categories' => $categories,
     'main_title' => 'yetiCave - добавить новый лот',
     'is_auth' => $is_auth,
-    'user_name' => $_SESSION['user']['name'],
+    'user_name' => $_SESSION['user']['user_name'],
     'user_avatar' => $user_avatar,
 ]);
 

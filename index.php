@@ -54,7 +54,7 @@ $layout_content = renderTemplate('templates/layout.php', [
     'categories' => $categories,
     'content' => $content,
     'is_auth' => $is_auth,
-    'user_name' => $_SESSION['user']['name'],
+    'user_name' => $_SESSION['user']['user_name'],
     'user_avatar' => $user_avatar,
 ]);
 

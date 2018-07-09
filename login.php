@@ -9,6 +9,8 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
 
+    $user = searchUserByEmail($_POST['email'], $users);
+
 
     $required = [
         'email',
@@ -28,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    $user = searchUserByEmail($_POST['email'], $users);
+
 
 
     if (!count($errors) && $user) {
@@ -61,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         ]);
     } else {
+
+        $_SESSION['user']['name'] = $user['user_name'];
         header('Location: /index.php');
         exit();
     }

@@ -2,9 +2,9 @@
 require 'templates/functions.php';
 require 'config/db.php';
 
-session_start();
-
 $db = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+
+session_start();
 
 //$sql = "INSERT INTO  users
 //SET  user_registration_date = NOW(),  user_email = 'jasonstealer@ya.ru', user_name = 'secret', user_password = 'secret'";
@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'message'
     ];
 
-
     $dict = [
         'email' => 'Вам стоит ввести e-mail',
         'password' => 'Вам стоит ввести пароль',
@@ -29,6 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ];
 
     $errors = [];
+
+    $user = searchUserByEmail($_POST['email'], $users);
+    if ($user['user_email'] == $form['email']) {
+        $errors['email'] = 'Такой email уже занят';
+    } elseif (filter_var($form['email'], FILTER_VALIDATE_EMAIL) == false) {
+        $errors['email'] = 'Неправильный формат email';
+    }
 
     foreach ($required as $field) {
 
@@ -44,19 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors['name'] = "В имени должно быть не меньше 3 символов";
         }
 
-
-    }
-
-    $user = searchUserByEmail($_POST['email'], $users);
-    if ($user['user_email'] == $form['email']) {
-        $errors['email'] = 'Такой email уже занят';
-    } elseif (filter_var($form['email'], FILTER_VALIDATE_EMAIL) == false) {
-        $errors['email'] = 'Неправильный формат email';
     }
 
     if (isset($_FILES['avatar'])) {
         $tmp_name = $_FILES['avatar']['tmp_name'];
-        $file_path = __DIR__ . '\uploads\\img\\';
+        $file_relative_path = '\uploads\\img\\';
+        $file_path = __DIR__ . $file_relative_path;
         $file_name = $_FILES['avatar']['name'];
         $file_url = $file_path . $file_name;
 
@@ -70,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         } else {
             move_uploaded_file($tmp_name, $file_url);
-            $lot['path'] = $file_name;
+            $lot['path'] = $file_relative_path . $file_name;
 
         }
     } else {
@@ -85,15 +84,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'errors' => $errors
             ]);
         } else {
+
+
             $sql = "INSERT INTO users (user_registration_date, user_email, user_name, user_password, user_avatar,user_contacts ) " . " VALUES (NOW(), ?, ?, ?, ?, ?)";
-
-
             $stmt = mysqli_prepare($db, $sql);
-            mysqli_stmt_bind_param($stmt, 'sssss', $form['email'], $form['name'], $form['password'], $form['avatar'], $form['contacts']);
+            mysqli_stmt_bind_param($stmt, 'sssss', $form['email'], $form['name'], $form['password'], $lot['path'], $form['contacts']);
             mysqli_stmt_execute($stmt);
 
-            $_SESSION['user']['name'] = $user['user_name'];
-            var_dump($_SESSION['user']['name'] );
+
+
+            $_SESSION['user'] = $user;
+            $_SESSION['user']['name'] = $form['name'];
+
 
             header('Location: /index.php');
             exit();
@@ -126,7 +128,7 @@ $layout_content = renderTemplate('templates/layout.php', [
     'categories' => $categories,
     'content' => $content,
     'is_auth' => $is_auth,
-    'user_name' => $user_name,
+    'user_name' => $_SESSION['user']['name'],
     'user_avatar' => $user_avatar,
 ]);
 

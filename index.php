@@ -1,6 +1,22 @@
 <?php
+//
+//echo '<pre>';
+//var_dump();
+//echo '</pre>';
 require 'templates/functions.php';
-require 'templates/lots_list.php';
+// require 'templates/lots_list.php';
+require 'config/db.php';
+
+$db = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+
+$sql = "SELECT lot_id, lot_picture, category_name, lot_name, lot_start_price  FROM lots INNER JOIN categories ON lot_category = category_id";
+$result = mysqli_prepare($db, $sql);
+$stmt = db_get_prepare_stmt($db, $sql, []);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$lots_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+
 
 session_start();
 
@@ -31,7 +47,6 @@ if ($hours < 10) {
 };
 
 
-$user_name = 'Константин';
 $user_avatar = 'img/user.jpg';
 
 $categories = [
@@ -54,7 +69,7 @@ $layout_content = renderTemplate('templates/layout.php', [
     'categories' => $categories,
     'content' => $content,
     'is_auth' => $is_auth,
-    'user_name' => $_SESSION['user']['user_name'],
+    'user_name' => $user_name,
     'user_avatar' => $user_avatar,
 ]);
 

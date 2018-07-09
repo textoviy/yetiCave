@@ -46,8 +46,6 @@ if (isset($_GET['lot_id'])) {
 //    }
 //}
 
-
-
 $data = json_decode($_COOKIE['viewed_lots'], true);
 $data[$lot_id] = $lot_id;
 $encoded_data = json_encode($data);
@@ -84,7 +82,7 @@ $layout_content = renderTemplate('templates/layout.php', [
     'main_title' => $lot['title'],
     'category_name' => $lot['category_name'],
     'content' => $content,
-    'user_name' => $_SESSION['user']['name'],
+    'user_name' => $user_name,
     'user_avatar' => $user_avatar,
     'categories' => $categories
 ]);

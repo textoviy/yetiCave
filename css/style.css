@@ -1234,3 +1234,13 @@ input:invalid .form__error{
 .rates__item--end {
   opacity: 0.4;
 }
+
+.red-error {
+  color: red;
+
+}
+
+body .cost-error {
+
+    border: 1px solid red;
+}

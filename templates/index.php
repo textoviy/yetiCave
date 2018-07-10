@@ -39,8 +39,8 @@
                 <div class="lot__info">
                     <span class="lot__category"><?=$lots_list[$key]['category_name']; ?></span>
                     <h3 class="lot__title">
-                        <?= array_search($key, array_keys($lots_list)); ?>
-                        <a class="text-link" href="lot.php?lot_id=<?= array_search($key, array_keys($lots_list)); ?>"><?=htmlspecialchars(($lots_list[$key]['lot_name'])) ?></a>
+                      <?//= $lots_list[$key]['lot_id']; ?>
+                        <a class="text-link" href="lot.php?lot_id=<?= $lots_list[$key]['lot_id']; ?>"><?=htmlspecialchars(($lots_list[$key]['lot_name'])) ?></a>
                     </h3>
                     <div class="lot__state">
                         <div class="lot__rate">

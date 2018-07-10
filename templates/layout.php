@@ -28,9 +28,6 @@
                     <p><a href="my-lots.php"><?= htmlspecialchars($user_name); ?></a></p>
                     <p><a href="logout.php">Выход</a></p>
                 </div>
-
-
-
             <?php else: ?>
                 <ul class="user-menu__list">
                     <li class="user-menu__item">

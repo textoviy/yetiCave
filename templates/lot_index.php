@@ -19,14 +19,15 @@
                             <span class="lot-item__cost"><?= isset($price) ? format_text($price) : "";?></span>
                         </div>
                         <div class="lot-item__min-cost">
-                            Мин. ставка <span>12 000 р</span>
+                            Мин. ставка <span><?= $min_bet;?></span>
                         </div>
                     </div>
                     <?php if ($is_auth): ?>
-                        <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
+                        <form class="lot-item__form" action="lot.php?lot_id=<?= $_GET['lot_id']?>" method="post">
                             <p class="lot-item__form-item">
                                 <label for="cost">Ваша ставка</label>
-                                <input id="cost" type="number" name="cost" placeholder="12 000">
+                                <span class="<?= isset($error_bet) ?  'red-error' : ''; ?>"> <?= $error_bet;?></span>
+                                <input class="<?= isset($error_bet) ?  'cost-error' : ''; ?>" id="cost" type="number" name="cost" placeholder="12 000">
                             </p>
                             <button type="submit" class="button">Сделать ставку</button>
                         </form>

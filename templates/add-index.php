@@ -10,9 +10,9 @@
                 <label for="category">Категория</label>
                 <select id="category" name="category_name" >
                     <option value="standard_category">Выберите категорию</option>
-                    <?php foreach ($categories as $key => $val): ?>
+                    <?php foreach ($categories as $key): ?>
 
-                        <option value="<?= $key; ?>" > <?= $val; ?> </option>
+                        <option value="<?= $key['category_id']; ?>" > <?= $key['category_name']; ?> </option>
                     <?php endforeach; ?>
                 </select>
 

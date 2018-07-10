@@ -17,7 +17,6 @@ $result = mysqli_stmt_get_result($stmt);
 $lots_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 
-
 session_start();
 
 if (isset($_SESSION['user'])) {

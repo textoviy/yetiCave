@@ -161,7 +161,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             htmlspecialchars($lot['lot_step']),
             htmlspecialchars($lot['category_name'])
         );
-        mysqli_stmt_execute($stmt);
+
+        $res = mysqli_stmt_execute($stmt);
+        if ($res) {
+            $lot_id = mysqli_insert_id($db);
+            header("Location: lot.php?lot_id=" . $lot_id);
+        }
+        else {
+            $content = include_template('error.php', ['error' => mysqli_error($db)]);
+        }
+
 
         foreach ($categories as $key) {
             if ($key['category_id'] == intval($lot['category_name'])) {

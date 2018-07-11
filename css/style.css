@@ -1241,6 +1241,11 @@ input:invalid .form__error{
 }
 
 body .cost-error {
-
     border: 1px solid red;
+}
+
+.lot-item__min-cost--error {
+  color: red;
+  font-weight: 600;
+  text-decoration: underline;
 }

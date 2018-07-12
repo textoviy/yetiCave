@@ -2,11 +2,20 @@
 require 'templates/functions.php';
 require 'config/db.php';
 //require 'templates/lots_list.php';
+
+//if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['triggerPost'])) {
+//    $actual_link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+//    header("Location: {$actual_link}");
+//    header("Referrer-Policy: no-referrer");
+//}
+
+
 session_start();
 $db = mysqli_connect($db_host, $db_user, $db_password, $db_name);
 
 if (isset($_SESSION['user'])) {
     $is_auth = true;
+    $user_id = $_SESSION['user']['user_id'];
     $user_name = $_SESSION['user']['name'];
     $user_avatar = $_SESSION['user']['avatar'] ? 'img/uploads/users/' . $_SESSION['user']['avatar']: 'img/user.jpg';
 }
@@ -16,7 +25,11 @@ $lot = null;
 if (isset($_GET['lot_id'])) {
 
     $lot_id = intval($_GET['lot_id']);
-    $sql = "SELECT lot_name, lot_description, lot_picture, lot_creation_date, lot_end_date, lot_start_price, lot_bet_step, lot_author, lot_category, category_name FROM lots INNER JOIN categories ON lot_category = category_id WHERE lot_id = '$lot_id'";
+
+
+    $sql = "SELECT lot_name, lot_description, lot_picture, lot_creation_date, lot_end_date,
+ lot_start_price, lot_bet_step, lot_author, lot_category, category_name FROM 
+lots INNER JOIN categories ON lot_category = category_id WHERE lot_id = '$lot_id'";
     $result = mysqli_prepare($db, $sql);
     $stmt = db_get_prepare_stmt($db, $sql, []);
     mysqli_stmt_execute($stmt);
@@ -24,19 +37,25 @@ if (isset($_GET['lot_id'])) {
     $lot = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     $sql = "SELECT bid_date, bid_amount, bid_user, bid_lot, user_name 
-    FROM bids INNER JOIN users ON bid_user = user_id WHERE bid_lot = '$lot_id'";
+    FROM bids INNER JOIN users ON bid_user = user_id WHERE bid_lot = '$lot_id' ORDER BY bid_amount DESC";
     $result = mysqli_prepare($db, $sql);
     $stmt = db_get_prepare_stmt($db, $sql, []);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    $lot_bet_information = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $lot_bets_information = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 }
 
 
-$lot_price = isset($lot_bet_information[0]['bid_amount']) ? $lot_bet_information[0]['bid_amount'] : $lot[0]['lot_start_price'];
-$min_bet = $lot_price +  $lot[0]['lot_bet_step'];
 
+$lot_price = isset($lot_bets_information[0]['bid_amount']) ? $lot_bets_information[0]['bid_amount'] : $lot[0]['lot_start_price'];
+$min_bet = $lot_price + $lot[0]['lot_bet_step'];
+//echo '<pre>';
+//var_dump($lot_bet_information);
+//var_dump($lot_bet_information[0]['bid_amount']);
+//var_dump($lot[0]['lot_start_price']);
+//var_dump($min_bet);
+//echo '</pre>';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bet = $_POST['cost'];
@@ -56,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($error_bet)) {
         $content = renderTemplate('templates/lot_index.php', [
             'error_bet' => $error_bet,
+            'lot_bets_information' => $lot_bets_information,
             'lot' => $lot,
             'is_auth' => $is_auth,
             'title' => $lot[0]['lot_name'],
@@ -65,8 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'url' => $lot[0]['lot_picture'],
             'min_bet' => $min_bet
         ]);
-
-
 
         $layout_content = renderTemplate('templates/layout.php', [
             'is_auth' => $is_auth,
@@ -142,7 +160,8 @@ setcookie('viewed_lots', $encoded_data, time() + 100500, '/');
 //var_dump($lot);
 
 $content = renderTemplate('templates/lot_index.php', [
-    'error_bet' => NULL,
+    'error_bet' => $error_bet,
+    'lot_bets_information' => $lot_bets_information,
     'lot' => $lot,
     'is_auth' => $is_auth,
     'title' => $lot[0]['lot_name'],
@@ -162,6 +181,13 @@ $layout_content = renderTemplate('templates/layout.php', [
     'user_avatar' => $user_avatar,
     'categories' => $categories
 ]);
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $actual_link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("Location: {$actual_link}");
+    header("Referrer-Policy: no-referrer");
+}
+
 
 print($layout_content);
 ?>

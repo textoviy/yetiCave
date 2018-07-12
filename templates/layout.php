@@ -5,6 +5,7 @@
     <title><?=$main_title;?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+
 </head>
 <body>
 

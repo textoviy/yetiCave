@@ -16,13 +16,22 @@ mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $lots_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
+$sql = "SELECT bid_date, bid_amount, bid_user, bid_lot, user_name 
+    FROM bids INNER JOIN users ON bid_user = user_id WHERE bid_lot = '$lot_id' ORDER BY bid_amount DESC";
+$result = mysqli_prepare($db, $sql);
+$stmt = db_get_prepare_stmt($db, $sql, []);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$lot_bets_information = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 
 session_start();
 
 if (isset($_SESSION['user'])) {
+    var_dump($_SESSION);
     $is_auth = true;
-    $user_name = $_SESSION['user']['name'];
-    $user_avatar = $_SESSION['user']['avatar'] ? 'img/uploads/users/' . $_SESSION['user']['avatar']: 'img/user.jpg';
+    $user_name = $_SESSION['user']['user_name'];
+    $user_avatar = isset($_SESSION['user']['user_avatar']) ? $_SESSION['user']['user_avatar']  : 'img/user.jpg';
 }
 
 date_default_timezone_set("Europe/Moscow");
@@ -48,9 +57,7 @@ if ($hours < 10) {
 
 $user_avatar = 'img/user.jpg';
 
-$categories = [
-    "Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"
-];
+
 
 
 $content = renderTemplate('templates/index.php', [

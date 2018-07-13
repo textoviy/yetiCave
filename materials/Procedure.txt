@@ -1,0 +1,5 @@
+if ((SELECT COUNT(bid_user) FROM bids WHERE bid_user = param2 AND bid_lot = param3) = 0) then
+		INSERT INTO bids (bid_date, bid_amount, bid_user, bid_lot) VALUES (NOW(), param1, param2, param3);
+	else
+		UPDATE bids SET bid_date=NOW(), bid_amount = param1 WHERE bid_user = param2 AND bid_lot = param3;
+	end if

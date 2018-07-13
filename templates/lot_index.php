@@ -36,7 +36,7 @@
                 </div>
                 <div class="history">
                     <h3>История ставок (<span><?= count($lot_bets_information)?></span>)</h3>
-                        <?php for($i = 0; $i < count($lot_bets_information); $i++) :?>
+                        <?php for($i = 0; $i < count($lot_bets_information) && $i <= 10; $i++) :?>
                     <table class="history__list">
                         <tr class="history__item">
                             <td class="history__name"><?= $lot_bets_information[$i]['user_name'] ?></td>

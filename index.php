@@ -26,12 +26,12 @@ $lot_bets_information = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 
 session_start();
-
+var_dump($lots_list);
 if (isset($_SESSION['user'])) {
-    var_dump($_SESSION);
     $is_auth = true;
     $user_name = $_SESSION['user']['user_name'];
-    $user_avatar = isset($_SESSION['user']['user_avatar']) ? $_SESSION['user']['user_avatar']  : 'img/user.jpg';
+    $user_avatar = $_SESSION['user']['user_avatar'];
+    var_dump($_SESSION['user']['user_avatar']);
 }
 
 date_default_timezone_set("Europe/Moscow");
@@ -54,12 +54,6 @@ if ($hours < 10) {
     $hours = 0 . $hours ;
 };
 
-
-$user_avatar = 'img/user.jpg';
-
-
-
-
 $content = renderTemplate('templates/index.php', [
     'id' => $id,
     'categories' => $categories,
@@ -67,7 +61,6 @@ $content = renderTemplate('templates/index.php', [
     'timer' => $timer,
 
 ]);
-
 
 $layout_content = renderTemplate('templates/layout.php', [
     'nav' => $nav,

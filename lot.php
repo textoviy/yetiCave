@@ -16,7 +16,7 @@ $db = mysqli_connect($db_host, $db_user, $db_password, $db_name);
 if (isset($_SESSION['user'])) {
     $is_auth = true;
     $user_id = $_SESSION['user']['user_id'];
-    $user_name = $_SESSION['user']['name'];
+    $user_name = $_SESSION['user']['user_name'];
     $user_avatar = $_SESSION['user']['avatar'] ? 'img/uploads/users/' . $_SESSION['user']['avatar']: 'img/user.jpg';
 }
 

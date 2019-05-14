@@ -1,0 +1,3 @@
+https://github.com/liberborn/
+
+SELECT lot_id, lot_name, lot_picture, lot_description, lot_start_price, category_name FROM `lots` INNER JOIN categories ON lot_category = category_id WHERE lot_name LIKE "%î%" OR lot_description LIKE "%6%"

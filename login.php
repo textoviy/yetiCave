@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $_SESSION['user']['name'] = $user['user_name'];
         header('Location: /index.php');
-        exit();
+        die();
     }
 }
 

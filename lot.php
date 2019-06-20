@@ -1,4 +1,6 @@
 <?php
+require 'vendor/autoload.php';
+
 require 'templates/functions.php';
 require 'config/db.php';
 //require 'templates/lots_list.php';
@@ -143,9 +145,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //}
 
 $data = json_decode($_COOKIE['viewed_lots'], true);
-$data[$lot_id] = $lot_id;
+$data[$lot_id] = $lot;
+//echo "<pre>";
+//var_dump($data[$lot_id]);
+//echo "</pre>";
 $encoded_data = json_encode($data);
 setcookie('viewed_lots', $encoded_data, time() + 100500, '/');
+
+//lot_id, lot_picture, category_name, lot_name, lot_start_price 
 
 //if (!isset($_COOKIE['viewed_lots'])) {
 //    setcookie('viewed_lots', json_encode([]), time() + 100500, '/');

@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $sql = "INSERT INTO users (user_registration_date, user_email, user_name, user_password, user_avatar,user_contacts ) " . " VALUES (NOW(), ?, ?, ?, ?, ?); ";
             $stmt = mysqli_prepare($db, $sql);
-            mysqli_stmt_bind_param($stmt, 'sssss', $form['email'], $form['name'], $form['password'], $lot['path'], $form['contacts']);
+            mysqli_stmt_bind_param($stmt, 'sssss', $form['email'], $form['name'], $form['password'], $lot['path'], $form['message']);
             mysqli_stmt_execute($stmt);
             mysqli_insert_id($db);
 
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user']['user_email'] = $form['email'];
             $_SESSION['user']['user_password'] = $form['password'];
             $_SESSION['user']['user_avatar'] = $lot['path'];
-            $_SESSION['user']['user_contacts'] = $form['contacts'];
+            $_SESSION['user']['user_contacts'] = $form['message'];
 
 
 

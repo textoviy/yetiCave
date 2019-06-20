@@ -1,0 +1,7 @@
+{
+    "require": {
+        "nesbot/carbon": "^2.19",
+        "jenssegers/date": "^3.5",
+        "swiftmailer/swiftmailer": "^6.0"
+    }
+}

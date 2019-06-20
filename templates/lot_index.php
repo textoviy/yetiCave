@@ -1,4 +1,3 @@
-
 <section class="lot-item container">
         <h2><?= isset($title) ? $title : ""; ?></h2>
         <div class="lot-item__content">
@@ -36,12 +35,18 @@
                 </div>
                 <div class="history">
                     <h3>История ставок (<span><?= count($lot_bets_information)?></span>)</h3>
-                        <?php for($i = 0; $i < count($lot_bets_information) && $i <= 10; $i++) :?>
+                        <?php
+                        use Jenssegers\Date\Date;
+                        Date::setLocale('ru');
+                        date_default_timezone_set('Asia/Yekaterinburg');
+                        //Asia/Yekaterinburg
+
+                        for($i = 0; $i < count($lot_bets_information) && $i <= 10; $i++) :?>
                     <table class="history__list">
                         <tr class="history__item">
                             <td class="history__name"><?= $lot_bets_information[$i]['user_name'] ?></td>
                             <td class="history__price"><?= $lot_bets_information[$i]['bid_amount']?></td>
-                            <td class="history__time"><?= $lot_bets_information[$i]['bid_date']?></td>
+                            <td class="history__time"><?= Date::parse($lot_bets_information[$i]['bid_date'])->diffForHumans()?></td>
                         </tr>
                         <?php endfor; ?>
                     </table>

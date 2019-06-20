@@ -96,3 +96,270 @@ FROM lots
 WHERE lot_creation_date < lot_end_date
 GROUP BY lots.lot_name, lot_start_price, lot_picture, lot_creation_date, lot_category
 ORDER BY lot_creation_date DESC;
+
+
+
+
+
+-- Лоты без победителя
+
+SELECT lot_id, lot_picture, category_name, lot_name, lot_start_price, lot_winner FROM `lots` 
+    INNER JOIN `categories`
+          ON lot_category = category_id WHERE lot_winner IS NULL
+
+
+-- Лоты, у которых еще не прошло время
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date FROM `lots` WHERE NOW() BETWEEN `lot_creation_date` AND `lot_end_date`
+
+
+
+
+
+
+-- Не рабочине
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, bid_amount FROM `lots`
+        INNER JOIN `categories`
+          ON lot_category = category_id
+         INNER JOIN `bids`
+          ON lot_id = bid_lot AND
+          AND bid_amount = (SELECT MAX(bid_amount) FROM `bids`)
+        WHERE lot_winner IS NULL AND NOW() BETWEEN `lot_creation_date` AND `lot_end_date`
+
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, bid_amount, lot_author
+  FROM `lots`
+  INNER JOIN `categories`
+          ON lot_category = category_id
+  INNER JOIN `bids`
+          ON lot_id = bid_lot
+    WHERE 
+        (SELECT MAX(bid_amount ) FROM bids WHERE bid_user = lot_author)
+
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, lot_author, bid_amount
+  FROM `lots`
+  LEFT OUTER JOIN `categories`
+          ON lot_category = category_id
+  LEFT OUTER JOIN `bids`
+          ON lot_id = bid_lot
+    WHERE bid_amount IN 
+        (SELECT MAX(bid_amount) FROM bids WHERE bid_user = lot_author)
+
+        
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, lot_author, bid_amount
+  FROM `lots`
+  LEFT OUTER JOIN `categories`
+          ON lot_category = category_id
+  LEFT OUTER JOIN `bids`
+          ON lot_id = bid_lot
+    WHERE bid_amount IN 
+        (SELECT MAX(bid_amount) FROM bids WHERE lot_author = bid_user)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, lot_author, bid_amount
+  FROM `lots`
+  LEFT OUTER JOIN `categories`
+          ON lot_category = category_id
+  LEFT OUTER JOIN `bids`
+          ON lot_id = bid_lot
+GROUP BY lot_name
+ORDER BY lot_name
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, lot_author, bid_amount, bid_user
+  FROM `lots`
+  INNER JOIN `categories`
+          ON lot_category = category_id
+  INNER JOIN `bids`
+          ON lot_id = bid_lot
+GROUP BY lot_id
+ORDER BY lot_id
+
+
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, lot_author, max(bid_amount), bid_user
+  FROM `lots`
+  INNER JOIN `categories`
+          ON lot_category = category_id
+  INNER JOIN `bids`
+          ON lot_id = bid_lot
+          GROUP BY lot_id
+          ORDER BY lot_id ASC
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, lot_author, max(bid_amount), bid_user
+  FROM `lots`
+  INNER JOIN `categories`
+          ON lot_category = category_id
+  INNER JOIN `bids`
+          ON lot_id = bid_lot
+          WHERE lot_winner IS NULL AND NOW() BETWEEN `lot_creation_date` AND `lot_end_date`
+          GROUP BY lot_id
+          ORDER BY lot_id ASC
+
+
+
+
+
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, lot_author, max(bid_amount), bid_user, user_email
+  FROM `lots`
+  INNER JOIN `categories`
+          ON lot_category = category_id
+  INNER JOIN `users`
+          ON lot_author = user_id
+  INNER JOIN `bids`
+          ON lot_id = bid_lot
+          WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+          GROUP BY lot_id
+          ORDER BY lot_id ASC
+  
+
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, max(bid_amount), bid_user, user_email
+  FROM `lots`
+  INNER JOIN `categories`
+          ON lot_category = category_id
+  INNER JOIN `users`
+          ON (SELECT bid_user
+           FROM `bids`
+               INNER JOIN `users`
+           WHERE bid_user = `users`.user_id
+           ORDER BY bid_id DESC
+           LIMIT 1) = user_id
+  INNER JOIN `bids`
+          ON lot_id = bid_lot
+          WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+          GROUP BY lot_id
+          ORDER BY bid_amount ASC
+          
+
+
+
+
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, max(bid_amount), bid_user, user_email
+  FROM `lots`
+  INNER JOIN `categories`
+          ON lot_category = category_id
+  INNER JOIN `users`
+          ON (SELECT bid_user
+           FROM `bids`
+               INNER JOIN `users`
+           WHERE bid_user = `users`.user_id
+           ORDER BY bid_id DESC
+           LIMIT 1) = user_id
+  INNER JOIN `bids`
+          ON (SELECT bid_amount
+           FROM `bids`
+               INNER JOIN `users`
+           WHERE bid_user = user_id
+           ORDER BY bid_id DESC
+           LIMIT 1) = bid_amount
+          WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+          GROUP BY lot_id
+          ORDER BY bid_amount ASC
+          
+
+
+
+
+
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, max(bid_amount), bid_user, user_email
+  FROM `lots`
+  INNER JOIN `categories`
+          ON lot_category = category_id
+  INNER JOIN `users`
+          ON lot_author = user_id
+  INNER JOIN `bids`
+          ON lot_id = bid_lot
+          WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+          GROUP BY lot_id
+          ORDER BY bid_amount DESC
+
+
+
+
+
+
+
+          
+          
+          
+          
+SELECT   lot_name, lot_winner, lot_end_date, lot_creation_date, MAX(bid_amount), bid_user, user_email, lot_author
+  FROM `bids`
+ CROSS JOIN `users`
+          ON bid_user = user_id
+  CROSS JOIN `lots`
+          ON bid_lot = lot_id
+          WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+          GROUP BY lot_name
+          ORDER BY bid_amount ASC
+
+
+
+
+SELECT lot_id, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, max(bid_amount), bid_user, user_email
+  FROM `bids`
+  JOIN (SELECT bid_id, max(bid_amount) FROM `bids` 
+        GROUP BY bid_id) AS max_bid_amounts
+   JOIN (SELECT user_id, user_email FROM `users` 
+        GROUP BY user_id) AS users
+   JOIN (SELECT lot_winner, lot_name, lot_start_price, lot_end_date, lot_creation_date, lot_id  FROM `lots`) AS lots_winners
+          WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+          GROUP BY lot_id
+          ORDER BY bid_amount DESC
+          
+          
+          
+SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date, lot_creation_date, max(bid_amount), bid_user, user_email, lot_author
+  FROM `bids`
+  INNER JOIN `users`
+          ON bid_user = user_id
+  INNER JOIN `lots`
+          ON  bid_lot = lot_id AND lot_author <> bid_user AND bid_user
+          WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date` AND bid_user <> lot_author
+          GROUP BY lot_id
+          ORDER BY bid_amount DESC
+          
+        
+
+        
+        
+
+
+

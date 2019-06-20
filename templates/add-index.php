@@ -29,14 +29,15 @@
             <div class="preview">
                 <button class="preview__remove" type="button">x</button>
                 <div class="preview__img">
-                    <img src="img/avatar.jpg" width="113" height="113" alt="Изображение лота">
+                    <img src="img/avatar.jpg" class="img" width="113" height="113" alt="Изображение лота">
                 </div>
             </div>
             <div class="form__input-file">
-                <input class="visually-hidden" name="lot_file" type="file" id="lot_img" value="">
+                <input class="visually-hidden" name="lot_file" type="file" id="lot_img" onchange="previewFile()" value="">
                 <label for="lot_img">
                     <span class="">+ Добавить</span>
                 </label>
+                <img src="" height="200" alt="Предпросмотр картинки...">
             </div>
             <span class="form__error"><?=isset($errors['lot_file']) ? $errors['lot_file'] : '';?></span>
         </div>
@@ -60,4 +61,31 @@
         <span class=" <?= count($errors) ?  " form--invalid" : ""; ?>"> </span>
         <button type="submit" class="button">Добавить лот</button>
     </form>
+<script>
+    var img_preview = document.querySelector('.img');
+    var preview__remove = document.querySelector('.preview__remove');
+    var preview = document.querySelector('.preview');
+    function previewFile() {
+
+        var file    = document.querySelector('input[type=file]').files[0];
+        var reader  = new FileReader();
+        img_preview.src = '';
+        reader.onloadend = function () {
+            img_preview.src = reader.result;
+        }
+
+        if (file) {
+            preview.style.display = 'block';
+            reader.readAsDataURL(file);
+        } else {
+            img_preview.src = "";
+        }
+    }
+
+    preview__remove.addEventListener('click', function() {
+        preview.style.display = 'none';
+    })
+
+
+</script>
 

@@ -25,11 +25,11 @@
         <div class="preview">
             <button class="preview__remove" type="button">x</button>
             <div class="preview__img">
-                <img src="img/avatar.jpg" width="113" height="113" alt="Ваш аватар">
+                <img src="img/avatar.jpg" class="img" width="113" height="113" alt="Ваш аватар">
             </div>
         </div>
-        <div class="form__input-file <?=isset($errors['message']) ? 'form__item--invalid' : '';?>">
-            <input class="visually-hidden" type="file" name="avatar" id="photo2" value="">
+        <div class="form__input-file <?=isset($errors['message']) ? 'form__item--invalid' : '';?>" >
+            <input class="visually-hidden" type="file" name="avatar" id="photo2" value="" onchange="previewFile()">
             <label for="photo2">
                 <span>+ Добавить</span>
             </label>
@@ -40,3 +40,31 @@
     <button type="submit" class="button">Зарегистрироваться</button>
     <a class="text-link" href="login.php">Уже есть аккаунт</a>
 </form>
+<script>
+    var img_preview = document.querySelector('.img');
+    var preview__remove = document.querySelector('.preview__remove');
+    var preview = document.querySelector('.preview');
+    function previewFile() {
+
+        var file    = document.querySelector('input[type=file]').files[0];
+        var reader  = new FileReader();
+        img_preview.src = '';
+        reader.onloadend = function () {
+            console.log("sdfg");
+            img_preview.src = reader.result;
+        }
+
+        if (file) {
+            preview.style.display = 'block';
+            reader.readAsDataURL(file);
+        } else {
+            img_preview.src = "";
+        }
+    }
+
+    preview__remove.addEventListener('click', function() {
+        preview.style.display = 'none';
+    })
+
+
+</script>

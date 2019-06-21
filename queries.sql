@@ -355,6 +355,103 @@ SELECT lot_id, lot_picture, lot_name, lot_start_price, lot_winner, lot_end_date,
           WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date` AND bid_user <> lot_author
           GROUP BY lot_id
           ORDER BY bid_amount DESC
+
+
+
+
+
+SELECT lot_id, lot_creation_date, lot_end_date
+  FROM `lots`
+  WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+    GROUP BY lot_id
+    
+    
+SELECT bid_lot, MAX(bid_date), MAX(bid_amount)
+  FROM `bids`
+  INNER JOIN `lots`
+    ON (SELECT lot_id, lot_creation_date, lot_end_date
+  FROM `lots`
+  WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+    GROUP BY lot_id
+      ) = bid_lot
+
+
+
+
+
+
+
+-- Узнаем id нулевых лотов
+
+SELECT lot_id
+  FROM `lots`
+  WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+    GROUP BY lot_id
+
+-- Узнаем последнюю макс ставку
+
+SELECT bid_lot, MAX(bid_date), MAX(bid_amount)
+  FROM `bids`
+  INNER JOIN `lots`
+    ON bid_lot = lot_id
+    WHERE lot_id = 36
+
+--Узнаем пользователя, который поставил 
+
+SELECT bid_lot,bid_date, bid_amount, user_email
+  FROM `bids`
+  INNER JOIN `users`
+    ON bid_user = user_id
+    WHERE bid_lot = 36
+    ORDER BY bid_amount DESC LIMIT 1
+
+
+-- Последний поставивший на выигранном лоте
+SELECT bid_lot,bid_date, bid_amount, user_email, bid_date, lot_name, bid_user, lot_id
+  FROM `bids`
+  INNER JOIN `lots`
+    ON bid_lot = lot_id
+  INNER JOIN `users`
+    ON bid_user = user_id
+    WHERE bid_lot = 36
+    ORDER BY bid_amount DESC LIMIT 1
+
+
+
+
+
+SELECT bid_lot,bid_date, bid_amount, user_email, bid_date
+  FROM `bids`
+  INNER JOIN `lots`
+    ON bid_lot = lot_id
+  INNER JOIN `users`
+    ON bid_user = user_id
+    WHERE bid_lot IN (SELECT lot_id
+  FROM `lots`
+  WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+    GROUP BY lot_id)
+    ORDER BY bid_amount DESC LIMIT 1
+    
+
+SELECT lot_id
+  FROM `lots`
+  WHERE lot_winner IS NULL AND NOW() NOT BETWEEN `lot_creation_date` AND `lot_end_date`
+    GROUP BY lot_id
+
+
+   
+
+    
+    
+    
+
+          
+
+    
+    
+    
+
+
           
         
 

@@ -30,7 +30,7 @@ if (isset($_GET['lot_id'])) {
 
 
     $sql = "SELECT lot_name, lot_description, lot_picture, lot_creation_date, lot_end_date,
- lot_start_price, lot_bet_step, lot_author, lot_category, category_name FROM 
+ lot_start_price, lot_bet_step, lot_author, lot_category, category_name, lot_winner FROM 
 lots INNER JOIN categories ON lot_category = category_id WHERE lot_id = '$lot_id'";
     $result = mysqli_prepare($db, $sql);
     $stmt = db_get_prepare_stmt($db, $sql, []);
@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'lot' => $lot,
             'is_auth' => $is_auth,
             'title' => $lot[0]['lot_name'],
+            'lot_winner' => $lot[0]['lot_winner'],
             'lot_description' => $lot[0]['lot_description'],
             'category_name' => $lot[0]['category_name'],
             'price' => $lot_price,

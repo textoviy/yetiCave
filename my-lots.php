@@ -24,14 +24,15 @@ if (isset($_SESSION['user'])) {
 //    var_dump($_SESSION['user']['user_avatar']);
 }
 
-$sql = "SELECT bid_id, bid_date, lot_picture, bid_amount, bid_user, lot_author, lot_name, user_contacts, category_name, lot_id, lot_creation_date, lot_end_date FROM `bids`
-		INNER JOIN lots 
-        	ON bid_lot = lot_id
-        INNER JOIN users 
-        	ON bid_user = user_id
-        INNER JOIN categories 
-        	ON lot_category = category_id
-        WHERE bid_user = '$user_id'";
+$sql = "SELECT bid_lot,bid_date, bid_amount, user_email, bid_date, lot_name, bid_user, lot_id, lot_picture, user_contacts,  lot_creation_date, lot_end_date, lot_winner
+                        FROM `lots`
+                        INNER JOIN `users`
+                         ON lot_author = user_id
+                        INNER JOIN `bids`
+                        ON lot_id = bid_lot
+                         
+                         WHERE bid_user = '$user_id'
+        ORDER BY lot_winner, lot_end_date DESC" ;
 $result = mysqli_prepare($db, $sql);
 $stmt = db_get_prepare_stmt($db, $sql, []);
 mysqli_stmt_execute($stmt);

@@ -2,7 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="googlebot" content="noindex, nofollow"/>
+    <meta name="yandex" content="none"/>
     <title><?=$main_title;?></title>
+
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 

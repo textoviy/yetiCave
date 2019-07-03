@@ -1,0 +1,2 @@
+php_value extension fileinfo.so
+php_value date.timezone 'Asia/Yekaterinburg'
